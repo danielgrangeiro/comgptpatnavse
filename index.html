@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Execução Financeira · ComGptPatNavSE</title>
+  <meta name="description"
+    content="Serviços da Seção de Execução Financeira do Comando do Grupamento de Patrulha Naval do Sudeste para os navios subordinados.">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+  <!--
+    O mesmo arquivo roda no navegador comum e no Google Apps Script.
+    - Navegador / GitHub Pages: as marcações de template do Apps Script são
+      lidas como comentário e o link carrega o style.css.
+    - Apps Script: incluirCss() embute o arquivo "style" e o if (false)
+      apaga o <link>, que lá não teria de onde carregar.
+  -->
+  <?!= incluirCss('style'); ?>
+  <? if (false) { ?><link rel="stylesheet" href="style.css"><? } ?>
+</head>
+
+<body>
+  <div class="folha">
+
+    <header class="topo">
+      <a class="marca" href="#/">
+        <span class="marca-sigla">ComGptPatNavSE</span>
+        <span class="marca-secao">Execução Financeira</span>
+      </a>
+      <nav class="trilha" aria-label="Você está em" id="trilha" hidden>
+        <a href="#/">Início</a><span class="sep">›</span><span id="trilha-atual"></span>
+      </nav>
+    </header>
+
+    <!-- ====================================================== -->
+    <!-- PÁGINA INICIAL                                          -->
+    <!-- ====================================================== -->
+    <main class="vista" data-vista="inicio">
+      <section class="capa">
+        <p class="eyebrow">Comando do Grupamento de Patrulha Naval do Sudeste</p>
+        <h1>Seção de Execução Financeira</h1>
+        <p class="abre">Serviços para os navios subordinados e divulgação transparente dos
+          gastos e atos administrativos do Grupamento.</p>
+      </section>
+
+      <ul class="servicos">
+        <li>
+          <a class="servico" href="#/suprimento-de-fundos">
+            <span class="servico-num">01</span>
+            <span class="servico-nome">Suprimento de Fundos</span>
+            <span class="servico-desc">Guia do Cartão de Pagamento do Governo Federal: do
+              cadastro do cartão à comprovação.</span>
+            <span class="servico-estado">Abrir guia →</span>
+          </a>
+        </li>
+        <li>
+          <div class="servico em-breve" aria-disabled="true">
+            <span class="servico-num">02</span>
+            <span class="servico-nome">Diárias e Passagens</span>
+            <span class="servico-desc">Solicitação, cálculo e prestação de contas de
+              viagens a serviço.</span>
+            <span class="servico-estado">Em breve</span>
+          </div>
+        </li>
+        <li>
+          <div class="servico em-breve" aria-disabled="true">
+            <span class="servico-num">03</span>
+            <span class="servico-nome">Empenho e Pagamento</span>
+            <span class="servico-desc">Como o crédito do navio vira empenho, liquidação e
+              pagamento ao fornecedor.</span>
+            <span class="servico-estado">Em breve</span>
+          </div>
+        </li>
+        <li>
+          <div class="servico em-breve" aria-disabled="true">
+            <span class="servico-num">04</span>
+            <span class="servico-nome">Transparência</span>
+            <span class="servico-desc">Gastos e atos administrativos do Grupamento,
+              publicados para consulta.</span>
+            <span class="servico-estado">Em breve</span>
+          </div>
+        </li>
+      </ul>
+
+      <footer>
+        <p>Comando do Grupamento de Patrulha Naval do Sudeste · Seção de Execução
+          Financeira. Conteúdo de orientação: confira sempre a norma vigente antes de
+          instruir um processo.</p>
+      </footer>
+    </main>
+
+    <!-- ====================================================== -->
+    <!-- SUPRIMENTO DE FUNDOS                                    -->
+    <!-- ====================================================== -->
+    <main class="vista" data-vista="suprimento-de-fundos" hidden>
+
+    <nav class="painel" aria-label="Progresso e etapas">
+      <div class="painel-linha">
+        <span>Feito</span>
+        <span class="trilho"><span class="barra" id="barra"></span></span>
+        <span class="conta" id="conta">0 de 0</span>
+        <button type="button" class="botao" id="limpar">Limpar</button>
+      </div>
+      <ul class="atalhos">
+        <li><a href="#antes">Antes</a></li>
+        <li><a href="#cartao">1 · Cartão</a></li>
+        <li><a href="#concessao">2 · Concessão</a></li>
+        <li><a href="#uso">3 · Uso</a></li>
+        <li><a href="#scp">4 · SCP</a></li>
+        <li><a href="#comprovacao">Comprovação</a></li>
+        <li><a href="#normativos">Normativos</a></li>
+      </ul>
+    </nav>
+
+    <header>
+      <p class="eyebrow">Serviço 01 · Guia do CPGF</p>
+      <h1>Suprimento de Fundos</h1>
+      <p class="abre">Como pedir, usar e comprovar o Cartão de Pagamento do Governo
+        Federal, em quatro etapas. Resumo do Guia para Utilização do SF do
+        ComGptPatNavSE.</p>
+    </header>
+
+    <div class="aviso">
+      <strong>O cartão está no SEU CPF.</strong> Cabe a você:
+      <ul>
+        <li>exigir as notas fiscais no padrão correto;</li>
+        <li>inserir as NF no SCP;</li>
+        <li>certificar todo mês as faturas do cartão;</li>
+        <li>montar a comprovação corretamente.</li>
+      </ul>
+      Toda compra aparece no Portal da Transparência no seu nome. Erro vira
+      ressarcimento à União, pago por você.
+    </div>
+
+    <!-- ======================================================== -->
+    <section id="antes">
+      <h2>Antes de começar</h2>
+
+      <ul class="lista">
+        <li><strong>Leia o Manual de Suprimento de Fundos, 4ª edição (JAN2026).</strong>
+          Está na intranet da DFM:
+          <span class="caminho">Gestorias <span class="sep">›</span> Execução Financeira
+            <span class="sep">›</span> Manual de Suprimento de Fundos</span>.</li>
+        <li>Guarde todos os documentos do SF numa pasta própria, no seu armário ou
+          compartimento.</li>
+        <li>Contato regular entre navio e Grupamento é por <strong>MSG</strong>. Caso
+          eventual pode ser direto, mas sempre formalizado por <strong>Zimbra</strong>.</li>
+      </ul>
+
+      <div class="ficha">
+        <p class="ficha-titulo">Três termos</p>
+        <dl>
+          <div class="par">
+            <dt>Suprimento de Fundos</dt>
+            <dd>Regime excepcional de aquisição que inverte a ordem da despesa:
+              empenha, paga e só depois liquida.</dd>
+          </div>
+          <div class="par">
+            <dt>CPGF</dt>
+            <dd>Cartão emitido pelo Banco do Brasil. É por ele que você gasta o crédito
+              empenhado no seu CPF.</dd>
+          </div>
+          <div class="par">
+            <dt>Proposta de concessão</dt>
+            <dd>O pedido para empenhar um crédito no seu CPF, como pôr saldo num cartão
+              pré-pago.</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="feito">
+        <p class="feito-titulo">Feito</p>
+        <ul class="marcar">
+          <li><label><input type="checkbox" name="antes-manual"><span>Li o Manual de SF da DFM
+                (4ª ed.)</span></label></li>
+          <li><label><input type="checkbox" name="antes-pasta"><span>Separei uma pasta para os
+                documentos do SF</span></label></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <section id="cartao">
+      <h2><span class="num">1</span> Emitir o cartão</h2>
+      <p class="sub">Só para quem ainda não tem cartão, com a OM e o OD já cadastrados no
+        SF. Formulário: <strong>Cadastro do Portador</strong>, do Banco do Brasil.</p>
+
+      <p><a href="https://www45.bb.com.br/fmc/frm/fw0701383_1.jsp" target="_blank"
+          rel="noopener">Abrir o Cadastro do Portador no site do BB ↗</a></p>
+
+      <div class="ficha">
+        <p class="ficha-titulo">Unidade de Governo e portador</p>
+        <dl>
+          <div class="par">
+            <dt>CNPJ</dt>
+            <dd><code>00.394.502/0270-00</code></dd>
+          </div>
+          <div class="par">
+            <dt>Nome</dt>
+            <dd>ComGptPatNavSE</dd>
+          </div>
+          <div class="par">
+            <dt>Centro de custo</dt>
+            <dd>Nome e número do seu navio, pela tabela abaixo</dd>
+          </div>
+          <div class="par">
+            <dt>Unidade de faturamento</dt>
+            <dd>Em branco<span class="nota">Só se preenche em faturamento
+                centralizado.</span></dd>
+          </div>
+          <div class="par">
+            <dt>CPF, nome, nascimento</dt>
+            <dd>Seus dados</dd>
+          </div>
+          <div class="par">
+            <dt>Nome no cartão</dt>
+            <dd>Seu nome + <code>30</code> se o cartão for de <strong>material</strong>, ou
+              <code>39</code> se for de <strong>serviço</strong><span class="nota">Ex.:
+                “Fulano - 30”.</span></dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="rolagem">
+        <table>
+          <thead>
+            <tr>
+              <th>Nº centro de custo</th>
+              <th>Nome do centro de custo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="c">590103</td><td>DEMAIS GASTOS ADM (ComGptPatNavSE)</td></tr>
+            <tr><td class="c">81146</td><td>NAV PATRULHA GURUPA</td></tr>
+            <tr><td class="c">81147</td><td>NAVIO PATR GURUPI</td></tr>
+            <tr><td class="c">81153</td><td>NAV PATR OCEAN APA</td></tr>
+            <tr><td class="c">81148</td><td>NAV PATRULHA MACAE</td></tr>
+            <tr><td class="c">81152</td><td>NAV OCEAN AMAZONAS</td></tr>
+            <tr><td class="c">81123</td><td>NAVIO PURUS</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ficha">
+        <p class="ficha-titulo">Faturamento individual e dados pessoais</p>
+        <dl>
+          <div class="par">
+            <dt>Agência do débito</dt>
+            <dd><code>2234</code> <span class="nota">Prefixo sem dígito.</span></dd>
+          </div>
+          <div class="par">
+            <dt>Conta corrente</dt>
+            <dd><code>400.065</code> <span class="nota">Sem dígito.</span></dd>
+          </div>
+          <div class="par">
+            <dt>Dia do vencimento</dt>
+            <dd><code>10</code></dd>
+          </div>
+          <div class="par">
+            <dt>Tipo de cartão</dt>
+            <dd>Corporate</dd>
+          </div>
+          <div class="par">
+            <dt>Cargo</dt>
+            <dd>Militar da Marinha do Brasil</dd>
+          </div>
+          <div class="par">
+            <dt>Identidade, endereço, telefone…</dt>
+            <dd>Seus dados<span class="nota">Obrigatório só se você não tiver cadastro
+                no Banco do Brasil.</span></dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="ficha">
+        <p class="ficha-titulo">Limites e permissões</p>
+        <dl>
+          <div class="par">
+            <dt>Limite geral mensal</dt>
+            <dd>O máximo que você gasta por mês, somando todos os seus cartões<span
+                class="nota">Com limite de R$ 1.000,00, uma compra de R$ 1.001,00 é
+                recusada na maquininha.</span></dd>
+          </div>
+          <div class="par">
+            <dt>Saque</dt>
+            <dd><strong>Não</strong></dd>
+          </div>
+          <div class="par">
+            <dt>Compra parcelada</dt>
+            <dd><strong>Não</strong></dd>
+          </div>
+          <div class="par">
+            <dt>Uso no exterior</dt>
+            <dd><strong>Não</strong></dd>
+          </div>
+          <div class="par">
+            <dt>Compra internet / telefone</dt>
+            <dd><strong>Sim</strong></dd>
+          </div>
+          <div class="par">
+            <dt>Valor máximo por transação</dt>
+            <dd>Conforme a necessidade, em reais sem centavos<span class="nota">Compra
+                acima desse valor é recusada na maquininha.</span></dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="ficha">
+        <p class="ficha-titulo">Filtros (cartão Corporate)</p>
+        <dl>
+          <div class="par">
+            <dt>Valores por dia, semana e mês</dt>
+            <dd><strong>Deixe em branco.</strong> Limitar aqui atrapalha compras
+              futuras.</dd>
+          </div>
+          <div class="par">
+            <dt>Categorias</dt>
+            <dd>Marque só as que vai usar. As que o guia indica:
+              <span class="nota">3 Artigos eletrônicos · 11 Lojas de departamento ·
+                12 Materiais de construção · 13 Móveis e decoração · 14 Outros varejos ·
+                20 Serviços · 21 Serviços e autopeças · 22 Supermercados ·
+                23 Telemarketing e catálogo · 25 Outros estabelecimentos</span></dd>
+          </div>
+        </dl>
+      </div>
+
+      <h3>Fechar o formulário</h3>
+      <ol class="passos">
+        <li>Clique em <strong>Salvar</strong> se quiser guardar o que digitou.</li>
+        <li>Clique em <strong>Imprimir Preto&amp;Branco</strong> e gere o PDF.</li>
+        <li>Assinatura <strong>Gov.br</strong> do Comandante do Navio e do portador do
+          cartão.</li>
+      </ol>
+
+      <div class="feito">
+        <p class="feito-titulo">Feito</p>
+        <ul class="marcar">
+          <li><label><input type="checkbox" name="cartao-form"><span>Cadastro do Portador
+                preenchido, com o centro de custo do meu navio</span></label></li>
+          <li><label><input type="checkbox" name="cartao-perm"><span>Saque, parcelado e
+                exterior em “Não”; internet/telefone em “Sim”</span></label></li>
+          <li><label><input type="checkbox" name="cartao-assin"><span>PDF assinado no Gov.br
+                pelo Comandante e por mim</span></label></li>
+          <li><label><input type="checkbox" name="cartao-mao"><span>Cartão
+                recebido</span></label></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <section id="concessao">
+      <h2><span class="num">2</span> Pedir a concessão</h2>
+      <p class="sub">Com o cartão em mãos, a <strong>Proposta de Concessão</strong> indica
+        o crédito do navio que será empenhado no seu cartão.</p>
+
+      <p>Modelo na intranet do ComGptPatNavSE:
+        <span class="caminho">Seções <span class="sep">›</span> Execução
+          Financeira</span>.</p>
+
+      <div class="ficha">
+        <p class="ficha-titulo">Proposta de Concessão</p>
+        <dl>
+          <div class="par">
+            <dt>Proponente</dt>
+            <dd>Comandante do Navio, como Ordenador de Despesas</dd>
+          </div>
+          <div class="par">
+            <dt>Suprido</dt>
+            <dd>Você: nome, CPF, unidade, telefone e cargo (ex.: Enc. da Div. “XXX”)</dd>
+          </div>
+          <div class="par">
+            <dt>PTRES, Fonte, Plano Interno</dt>
+            <dd><span class="destaque">Verifique com o ComGptPatNavSE</span> antes de
+              preencher</dd>
+          </div>
+          <div class="par">
+            <dt>Tipo de despesa</dt>
+            <dd>Material de consumo — ND <code>339030</code><br>
+              Prestação de serviço — ND <code>339039</code></dd>
+          </div>
+          <div class="par">
+            <dt>Valor</dt>
+            <dd>Dentro do limite do regime (tabela abaixo)</dd>
+          </div>
+          <div class="par">
+            <dt>Finalidade</dt>
+            <dd>Ex.: “Aquisição de material conforme fundamento legal.”</dd>
+          </div>
+          <div class="par">
+            <dt>Justificativa</dt>
+            <dd>Um dos dois textos abaixo, conforme o regime</dd>
+          </div>
+          <div class="par">
+            <dt>CPGF</dt>
+            <dd>Saque: <code>N/A</code> · Fatura: o valor do SF</dd>
+          </div>
+          <div class="par">
+            <dt>Depósito em conta</dt>
+            <dd><code>N/A</code><span class="nota">Só quando for impossível usar o
+                CPGF.</span></dd>
+          </div>
+          <div class="par">
+            <dt>Período de aplicação</dt>
+            <dd>Até <strong>90 dias</strong></dd>
+          </div>
+          <div class="par">
+            <dt>Prestação de contas</dt>
+            <dd>Até <strong>30 dias</strong> após o fim do período de aplicação</dd>
+          </div>
+          <div class="par">
+            <dt>Assinaturas</dt>
+            <dd>Gov.br do Comandante do Navio (proponente) e sua (suprido)</dd>
+          </div>
+        </dl>
+      </div>
+
+      <h3>Justificativa e fundamento legal</h3>
+
+      <div class="modelo">
+        <div class="modelo-topo">
+          <span class="modelo-rotulo">Regime normal</span>
+          <button type="button" class="botao copiar" data-alvo="just-normal">Copiar</button>
+        </div>
+        <p class="modelo-texto" id="just-normal">Conforme Decreto nº 93.872/86, art. 45,
+          inciso III, combinado com a Portaria GM-MD nº 5.168/2021, este Suprimento de
+          Fundos visa atender despesas extraordinárias e de pequeno vulto, que não possam
+          ser submetidas ao processo normal de execução financeira, de forma a manter a
+          capacidade administrativa desta Organização Militar.</p>
+      </div>
+
+      <div class="modelo">
+        <div class="modelo-topo">
+          <span class="modelo-rotulo">Regime especial</span>
+          <button type="button" class="botao copiar" data-alvo="just-especial">Copiar</button>
+        </div>
+        <p class="modelo-texto" id="just-especial">Conforme o Decreto nº 93.872/86, art. 47,
+          combinado com a Portaria GM-MD nº 3.518/2021, este Suprimento de Fundos observará
+          o Regime Especial de Execução para atender as especificidades decorrentes de
+          atividades de preparo e emprego de meios militares que demandam despesas que,
+          pela essencialidade e necessidade de pronta resposta, não possam ser submetidas
+          ao processo normal de aplicação.</p>
+      </div>
+
+      <h3>Valor máximo por ato de concessão</h3>
+      <div class="rolagem">
+        <table>
+          <thead>
+            <tr>
+              <th>Regime</th>
+              <th>Base</th>
+              <th>Valor (R$)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Normal — pequeno vulto, outros serviços e compras em geral</td>
+              <td>5% do limite de dispensa</td>
+              <td class="n">3.274,61</td>
+            </tr>
+            <tr>
+              <td>Especial — navio de 1ª classe</td>
+              <td>51% do limite de dispensa</td>
+              <td class="n">33.400,98</td>
+            </tr>
+            <tr>
+              <td>Especial — navio de 2ª classe</td>
+              <td>45% do limite de dispensa</td>
+              <td class="n">29.471,45</td>
+            </tr>
+            <tr>
+              <td>Especial — navio de 3ª classe</td>
+              <td>39% do limite de dispensa</td>
+              <td class="n">25.541,92</td>
+            </tr>
+            <tr>
+              <td>Especial — navio de 4ª classe</td>
+              <td>30% do limite de dispensa</td>
+              <td class="n">19.647,63</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="sub">Limite de dispensa de R$ 65.492,11: art. 75, II, da Lei nº
+        14.133/2021, atualizado pelo Decreto nº 12.807/2025. Os valores mudam; confira no
+        Manual da DFM vigente.</p>
+
+      <h3>Calcular as datas</h3>
+      <div class="calc">
+        <label for="calc-inicio">Início do período de aplicação</label>
+        <input type="date" id="calc-inicio">
+        <dl class="calc-saida" id="calc-saida" hidden>
+          <div>
+            <dt>Fim da aplicação (90 dias)</dt>
+            <dd id="calc-fim"></dd>
+          </div>
+          <div>
+            <dt>Prestação de contas até</dt>
+            <dd id="calc-pc"></dd>
+          </div>
+          <div>
+            <dt>Texto para a proposta</dt>
+            <dd id="calc-periodo"></dd>
+          </div>
+        </dl>
+        <p class="calc-nota destaque" id="calc-alerta" hidden>Os 90 dias passariam de
+          31DEZ. O fim foi cortado no encerramento do exercício; confirme a data com o
+          ComGptPatNavSE.</p>
+        <p class="calc-nota">Exemplo do guia: aplicação de 01AGO a 29OUT26, prestação de
+          contas até 28NOV26. Término em dezembro: prestação de contas até 15JAN.</p>
+      </div>
+
+      <div class="aviso naval">
+        <strong>Quantos SF ao mesmo tempo?</strong> No máximo dois pendentes de
+        comprovação. O recomendado é um por vez.
+      </div>
+
+      <div class="feito">
+        <p class="feito-titulo">Feito</p>
+        <ul class="marcar">
+          <li><label><input type="checkbox" name="conc-ptres"><span>PTRES, Fonte e PI
+                confirmados com o ComGptPatNavSE</span></label></li>
+          <li><label><input type="checkbox" name="conc-valor"><span>Valor dentro do limite do
+                regime</span></label></li>
+          <li><label><input type="checkbox" name="conc-just"><span>Justificativa do regime
+                certo (art. 45 <em>ou</em> art. 47)</span></label></li>
+          <li><label><input type="checkbox" name="conc-assin"><span>Proposta assinada no Gov.br
+                pelo Comandante e por mim</span></label></li>
+          <li><label><input type="checkbox" name="conc-os"><span>Recebi o nº da OS de
+                concessão e o nº da Nota de Empenho</span></label></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <section id="uso">
+      <h2><span class="num">3</span> Usar o cartão</h2>
+      <p class="sub">Função <strong>crédito à vista</strong>. Antes de passar o cartão,
+        avise o lojista do CNPJ e da razão social que devem sair na nota.</p>
+
+      <div class="ficha">
+        <p class="ficha-titulo">Dados para a nota fiscal</p>
+        <dl>
+          <div class="par">
+            <dt>CNPJ</dt>
+            <dd><code id="nf-cnpj">00.394.502/0270-00</code>
+              <button type="button" class="botao copiar" data-alvo="nf-cnpj">Copiar</button></dd>
+          </div>
+          <div class="par">
+            <dt>Razão social</dt>
+            <dd>Comando do Grupamento de Patrulha Naval do Sudeste<span class="nota">Nas
+                notas de exemplo do guia aparece como “Comando da Marinha”.</span></dd>
+          </div>
+          <div class="par">
+            <dt>Endereço</dt>
+            <dd>Ilha das Cobras, Ed. 22 do AMRJ, Centro, Rio de Janeiro/RJ, CEP
+              20091-000 · Tel. (21) 2253-2833</dd>
+          </div>
+        </dl>
+      </div>
+
+      <ul class="erros">
+        <li><b>Nota com o CNPJ do navio não é aceita.</b> Peça ao fornecedor que reemita;
+          se não for possível, o valor volta por GRU.</li>
+        <li><b>Cupom fiscal e comprovante da maquininha não são nota fiscal.</b></li>
+        <li><b>O total da NF tem de ser igual ao valor passado na maquininha.</b> A
+          diferença é devolvida por você, por GRU.</li>
+      </ul>
+
+      <h3>O que pode comprar</h3>
+      <div class="ficha">
+        <dl>
+          <div class="par">
+            <dt>Regime especial</dt>
+            <dd>Despesas extraordinárias com gêneros alimentícios não fornecidos, e com
+              materiais e serviços para reparos de 1º e 2º escalões.</dd>
+          </div>
+          <div class="par">
+            <dt>Regime normal (pequeno vulto)</dt>
+            <dd>Reparo, conservação, adaptação, melhoramento ou recuperação de bens móveis
+              e imóveis da OM; serviços gráficos e fotográficos; carimbos e chaves.
+              Material para a sede só quando não há estoque e estocar seria inviável ou
+              antieconômico, como no reparo imediato de uma instalação.<span
+                class="nota destaque">Regime normal não compra gêneros nem material
+                permanente.</span></dd>
+          </div>
+        </dl>
+      </div>
+      <p>Antes de cada compra, pergunte: <em>essa é uma compra razoável?</em></p>
+
+      <h3>Três tarefas que se repetem até o fim do período</h3>
+      <ol class="passos">
+        <li><strong>Certificar cada NF</strong>, logo depois da compra.</li>
+        <li><strong>Certificar a fatura</strong>, todo mês.</li>
+        <li><strong>Inserir a NF no SCP</strong>, assim que ela chegar às suas mãos
+          (etapa 4).</li>
+      </ol>
+      <p>Digitalize cada nota assim que puder e guarde numa pasta da sua estação de
+        trabalho, além da pasta física.</p>
+
+      <h3>Certificar a nota fiscal</h3>
+      <p>Imprima o <strong>Certificado de Recebimento de Bens por Suprimento de
+          Fundos</strong> no verso da NF. Modelo na intranet do ComGptPatNavSE.</p>
+      <div class="ficha">
+        <dl>
+          <div class="par">
+            <dt>Documento de origem</dt>
+            <dd>Nº da sua Nota de Empenho (ex.: <code>2026NE35</code>)</dd>
+          </div>
+          <div class="par">
+            <dt>Recebido por</dt>
+            <dd>Nome, graduação e CPF de quem recebeu</dd>
+          </div>
+          <div class="par">
+            <dt>Perito</dt>
+            <dd><span class="destaque">Não pode ser o dono do cartão</span></dd>
+          </div>
+          <div class="par">
+            <dt>Justificativa</dt>
+            <dd>No padrão dos modelos abaixo</dd>
+          </div>
+          <div class="par">
+            <dt>Código OM</dt>
+            <dd>O do seu navio (<code>811XX</code>)</dd>
+          </div>
+          <div class="par">
+            <dt>Nº documento de despesa</dt>
+            <dd>Nº da NF</dd>
+          </div>
+          <div class="par">
+            <dt>Gestor do SF</dt>
+            <dd>Você: nome, graduação e CPF</dd>
+          </div>
+          <div class="par">
+            <dt>Agente fiscal</dt>
+            <dd>O do navio</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="modelo">
+        <div class="modelo-topo">
+          <span class="modelo-rotulo">Regime normal</span>
+          <button type="button" class="botao copiar" data-alvo="cert-normal">Copiar</button>
+        </div>
+        <p class="modelo-texto" id="cert-normal">Aquisição, em caráter excepcional, de (…),
+          material de pequeno vulto, visando (…).</p>
+      </div>
+      <div class="modelo">
+        <div class="modelo-topo">
+          <span class="modelo-rotulo">Regime especial · material</span>
+          <button type="button" class="botao copiar" data-alvo="cert-material">Copiar</button>
+        </div>
+        <p class="modelo-texto" id="cert-material">Aquisição, em caráter excepcional, de (…)
+          para manutenção no (…).</p>
+      </div>
+      <div class="modelo">
+        <div class="modelo-topo">
+          <span class="modelo-rotulo">Regime especial · gêneros</span>
+          <button type="button" class="botao copiar" data-alvo="cert-generos">Copiar</button>
+        </div>
+        <p class="modelo-texto" id="cert-generos">Aquisição, em caráter excepcional, de (…),
+          gênero alimentício não fornecido, visando prontificação para a comissão (…).</p>
+      </div>
+      <div class="modelo">
+        <div class="modelo-topo">
+          <span class="modelo-rotulo">Serviço</span>
+          <button type="button" class="botao copiar" data-alvo="cert-servico">Copiar</button>
+        </div>
+        <p class="modelo-texto" id="cert-servico">Contratação, em caráter excepcional, de
+          serviço de (…) para manutenção no (…).</p>
+      </div>
+
+      <h3>Certificar a fatura mensal</h3>
+      <p>Todo mês o ComGptPatNavSE envia a fatura para você certificar. Só então ele paga
+        o Banco do Brasil, com vencimento no dia 10. <span class="destaque">Atraso na
+          certificação gera juros, pagos pelo portador.</span></p>
+      <ol class="passos">
+        <li>Confira cada transação do extrato: cada uma precisa ter a sua NF.</li>
+        <li>Preencha o <strong>Certificado para Pagamento de CPGF</strong> no verso do
+          boleto (modelo na intranet do ComGptPatNavSE):
+          <ul class="lista">
+            <li>documento de origem: nº da NE;</li>
+            <li>perito: <span class="destaque">não pode ser o dono do cartão</span>;</li>
+            <li>justificativa: “Pagamento de fatura de CPGF – JUN26” (mês da fatura);</li>
+            <li>código OM: <code>811XX</code>; agente fiscal: o do navio.</li>
+          </ul>
+        </li>
+        <li>Se o boleto cobrir duas NE, discrimine o valor de cada uma. Ex.:
+          <code>2026NE35 – R$ 10.000,00</code> e <code>2026NE36 – R$ 2.951,45</code>.</li>
+      </ol>
+      <p>Ao certificar o boleto, você atesta ao Grupamento que está tudo certo: toda
+        despesa tem NF e o pagamento ao BB pode seguir.</p>
+
+      <div class="feito">
+        <p class="feito-titulo">Feito</p>
+        <ul class="marcar">
+          <li><label><input type="checkbox" name="uso-cnpj"><span>Todas as NF com o CNPJ
+                00.394.502/0270-00, não o do navio</span></label></li>
+          <li><label><input type="checkbox" name="uso-valor"><span>Valor de cada NF igual ao da
+                maquininha</span></label></li>
+          <li><label><input type="checkbox" name="uso-cert"><span>Todas as NF certificadas no
+                verso, com perito diferente de mim</span></label></li>
+          <li><label><input type="checkbox" name="uso-digit"><span>NF digitalizadas e
+                arquivadas</span></label></li>
+          <li><label><input type="checkbox" name="uso-fatura"><span>Faturas do período
+                certificadas no prazo</span></label></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <section id="scp">
+      <h2><span class="num">4</span> Lançar as notas no SCP</h2>
+      <p class="sub">O Sistema de Cartão de Pagamentos fica no Compras.gov.br. Enquanto a
+        nota não estiver lá, seu nome e CPF ficam em dívida com o TCU.</p>
+
+      <h3>Pedir acesso (uma vez)</h3>
+      <ol class="passos">
+        <li>Entre no <strong>SisNetuno</strong>. Sem acesso? Procure o Encarregado do
+          Programa Netuno da sua OM.</li>
+        <li><span class="caminho">Menu <span class="sep">›</span> Gestão de Senhas
+            <span class="sep">›</span> Solicitação</span>, e na linha
+          <strong>SIASG/Compras.gov</strong> clique em <strong>Solicitação</strong>.</li>
+        <li>Preencha:
+          <div class="ficha">
+            <dl>
+              <div class="par">
+                <dt>Perfil</dt>
+                <dd>Equipe de Apoio</dd>
+              </div>
+              <div class="par">
+                <dt>Número da OS</dt>
+                <dd>A OS do ComGptPatNavSE que concedeu o SF (ex.:
+                  <code>GPNSTE - XX/2026</code>)</dd>
+              </div>
+              <div class="par">
+                <dt>Telefone e CPF</dt>
+                <dd>Seus</dd>
+              </div>
+              <div class="par">
+                <dt>Observação</dt>
+                <dd><span id="scp-obs">Solicitação para utilização do SCP na condição de
+                    suprido por SF</span>
+                  <button type="button" class="botao copiar" data-alvo="scp-obs">Copiar</button></dd>
+              </div>
+            </dl>
+          </div>
+        </li>
+        <li>Salve. Em alguns dias a solicitação é atendida no próprio SisNetuno.</li>
+      </ol>
+
+      <h3>Lançar cada nota</h3>
+      <ol class="passos">
+        <li>No Compras.gov.br: <span class="caminho">Serviços do Governo
+            <span class="sep">›</span> SCP <span class="sep">›</span> Detalhar
+            Compra/Saque</span>.</li>
+        <li>Escolha a opção <strong>fatura</strong> e filtre pelo mês das transações.
+          <span class="destaque">A transação leva um dia para aparecer.</span></li>
+        <li>Cada transação é uma compra no cartão. Abra a transação e insira a(s) NF
+          correspondente(s); cabe mais de uma NF por transação.</li>
+        <li>Preencha os dados da NF e escolha:
+          <ul class="lista">
+            <li><strong>detalhar os itens</strong>: digita cada item da nota; ou</li>
+            <li><strong>não detalhar</strong>: anexa o PDF da nota.</li>
+          </ul>
+        </li>
+        <li>Quando a soma dos itens igualar o valor da NF, ou o anexo entrar, o
+          <strong>saldo a detalhar</strong> fica em <code>0,00</code> e a nota aparece
+          como concluída (polegar verde).</li>
+      </ol>
+
+      <div class="feito">
+        <p class="feito-titulo">Feito</p>
+        <ul class="marcar">
+          <li><label><input type="checkbox" name="scp-acesso"><span>Acesso ao SIASG/Compras.gov
+                liberado</span></label></li>
+          <li><label><input type="checkbox" name="scp-todas"><span>Todas as transações com NF
+                lançada e saldo a detalhar 0,00</span></label></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <section id="comprovacao">
+      <h2>Comprovação</h2>
+      <p>Sua responsabilidade só termina quando o OD do ComGptPatNavSE aprova a
+        comprovação. Entregue no padrão, clara e organizada, até a data da prestação de
+        contas.</p>
+      <p>Qualquer irregularidade vira ressarcimento ao erário. Não chegue na data sem as
+        notas, sem os boletos certificados ou com compra irregular.</p>
+
+      <h3>Os erros que mais aparecem</h3>
+      <ul class="erros">
+        <li><b>NF com o CNPJ do navio.</b></li>
+        <li><b>Certificação da NF errada</b>, inclusive com o dono do cartão como
+          perito.</li>
+        <li><b>Gênero ou material permanente comprado no regime normal.</b></li>
+      </ul>
+
+      <div class="feito">
+        <p class="feito-titulo">Feito</p>
+        <ul class="marcar">
+          <li><label><input type="checkbox" name="comp-pasta"><span>Comprovação montada: NF
+                certificadas, boletos certificados e lançamentos no SCP</span></label></li>
+          <li><label><input type="checkbox" name="comp-entregue"><span>Entregue até a data da
+                prestação de contas</span></label></li>
+          <li><label><input type="checkbox" name="comp-aprov"><span>Aprovada pelo OD do
+                ComGptPatNavSE</span></label></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <section id="normativos" data-arquivos>
+      <h2>Normativos</h2>
+      <p class="sub">Para consulta. Confira sempre se a edição é a vigente.</p>
+      <ul class="docs">
+        <li><a data-arquivo="normativos/SGM-301-REV10.pdf" href="normativos/SGM-301-REV10.pdf"
+            target="_blank" rel="noopener"><b>SGM-301 (10ª Rev.)</b><span>Normas sobre
+              Administração Financeira e Contabilidade</span></a></li>
+        <li><a data-arquivo="normativos/subelementos/339030.pdf"
+            href="normativos/subelementos/339030.pdf" target="_blank" rel="noopener"><b>ND
+              339030</b><span>Material de consumo — subelementos</span></a></li>
+        <li><a data-arquivo="normativos/subelementos/339039.pdf"
+            href="normativos/subelementos/339039.pdf" target="_blank" rel="noopener"><b>ND
+              339039</b><span>Outros serviços de terceiros, PJ — subelementos</span></a></li>
+        <li><a data-arquivo="normativos/subelementos/449052_atualizado.pdf"
+            href="normativos/subelementos/449052_atualizado.pdf" target="_blank"
+            rel="noopener"><b>ND 449052</b><span>Equipamentos e material permanente —
+              subelementos</span></a></li>
+      </ul>
+    </section>
+
+    <footer>
+      <p><strong>Fonte:</strong> Guia para Utilização do Suprimento de Fundos,
+        ComGptPatNavSE. Base legal: Decreto nº 93.872/1986, arts. 45 e 47 · Portarias
+        GM-MD nº 5.168/2021 e nº 3.518/2021 · Lei nº 14.133/2021, art. 75 · Decreto
+        nº 12.807/2025 · Manual de Suprimento de Fundos da DFM, 4ª ed.</p>
+      <p>Valores e modelos devem ser conferidos no Manual da DFM vigente antes de usar.
+        As marcações desta página ficam só no navegador de quem a abriu.</p>
+    </footer>
+    </main>
+  </div>
+
+  <?!= incluirJs('script'); ?>
+  <? if (false) { ?><script src="script.js"></script><? } ?>
+</body>
+
+</html>
